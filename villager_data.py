@@ -103,6 +103,8 @@ def all_names_by_hobby(filename):
     hobbies = [sorted(fitness), sorted(nature), sorted(education), 
                 sorted(music), sorted(fashion), sorted(play)]
 
+    file_name.close()
+
     return hobbies
 
 
@@ -130,7 +132,8 @@ def all_data(filename):
         data_tuple = tuple(split_string)
         
         all_data.append(data_tuple)
-            
+
+    file_name.close()     
     return all_data
 
 
@@ -149,6 +152,18 @@ def find_motto(filename, villager_name):
     """
 
     # TODO: replace this with your code
+    motto = None
+    file_name = open(filename)
+
+    for line in file_name:
+        split_string = line.rstrip().split("|")
+        if villager_name == split_string[0]:
+            motto = split_string[4] 
+            break
+    
+    file_name.close()
+       
+    return motto
 
 
 def find_likeminded_villagers(filename, villager_name):
@@ -167,6 +182,27 @@ def find_likeminded_villagers(filename, villager_name):
     """
 
     # TODO: replace this with your code
+    file_name = open(filename)
 
-print(all_data("villagers.csv"))
+    personality_to_match = " "
+    like_minded_villagers = set()
+
+    for line in file_name:
+        split_string = line.rstrip().split("|")
+        if villager_name == split_string[0]:
+            personality_to_match = split_string[2] 
+            break
+    
+    file_name.close() #close file and reopen to reread from beginning of file for next loop
+    file_name = open(filename)
+
+    for line in file_name:
+        split_string = line.rstrip().split("|")
+        if personality_to_match == split_string[2]:
+            like_minded_villagers.add(split_string[0]) 
+            
+    file_name.close()
+    return like_minded_villagers
+
+print(find_likeminded_villagers("villagers.csv", "Audie"))
 
